@@ -1,13 +1,36 @@
-// 引入 cooking 依赖
+var path = require('path');
 var cooking = require('cooking');
 
-// 调用 set 方法传入自定义配置
 cooking.set({
-    entry: './src/index.js', // 指定入口文件
-    dist: './dist', // 设置打包后的文件目录
-    hash: true, // 打包的文件是否带 hash
-    sourceMap: true // 是否带 sourceMap
+  entry: {
+    app: ['babel-polyfill', './src/main.js']
+  },
+  dist: './dist',
+  template: './index.tpl',
+
+  devServer: {
+    port: 8080,
+    publicPath: '/'
+  },
+
+  // production
+  clean: true,
+  hash: true,
+  sourceMap: true,
+  minimize: true,
+  chunk: true, // see https://cookingjs.github.io/zh-cn/configuration.html#chunk
+  postcss: [
+    // require('...')
+  ],
+  publicPath: '/dist/',
+  assetsPath: 'static',
+  urlLoaderLimit: 10000,
+  static: true,
+  extractCSS: '[name].[contenthash:7].css',
+  alias: {
+    'src': path.join(__dirname, 'src')
+  },
+  extends: ['vue2', 'lint', 'sass', 'autoprefixer']
 });
 
-// 生成 webpack 配置并导出
 module.exports = cooking.resolve();
